@@ -1,15 +1,47 @@
-## Put comments here that give an overall description of what your
-## functions do
+## For this assignment we are to use the example functions to create 2 functions
+##the first function (makeCacheMatrix) creates a reversible matrix (square matrix)
+##and scores the reverse of that matrix in the cache. The second function either
+## finds the cached matrix (avoiding recomputation) or computes the reverse matrix
+## if it is not in the cache
 
-## Write a short comment describing this function
+## This function creates a matrix and caches the inverse
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  
+  #create empty cache
+  im <- NULL
+  set <- function(y) {
+    x <<- y
+    im <<- NULL
+  }
+  get <- function() x
+  setinverse <- function(inverse) im <<- inverse
+  getinverse <- function() im
+  list(set=set, get=get, setinverse=setinverse, getinverse=getinverse)
+  
 }
 
 
-## Write a short comment describing this function
+## This function computes the inverse of the matrix returned by 
+## makeCacheMatrix above. If the inverse has already been calculated (and 
+## the matrix has not changed), then cacheSolve should retrieve the inverse 
+## from the cache.
 
+## Return a matrix that is the inverse of 'x'
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  
+  im <- x$getinverse()
+  #check to see if its in cache...
+  if(!is.null(im)) {
+    message("Using Cached Data")
+    return(im)
+    #if its not, calculate it...
+  } else {
+    data <- x$get()
+    im <- solve(data)
+    x$setinverse(im)
+  }
+  #return inverse
+  im
 }
+
